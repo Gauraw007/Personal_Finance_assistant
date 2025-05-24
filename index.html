@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💼 Personal Finance Manager</h1>
+            <p>Complete solution for managing your finances, taxes, and investments</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-tab" onclick="switchTab('transactions')">💰 Transactions</button>
+            <button class="nav-tab" onclick="switchTab('investments')">📈 Investments</button>
+            <button class="nav-tab" onclick="switchTab('taxes')">📋 ITR & Taxes</button>
+            <button class="nav-tab" onclick="switchTab('budget')">📅 Monthly Budget</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <div class="dashboard">
+                <div class="card">
+                    <h3>💳 Current Balance</h3>
+                    <div class="amount" id="current-balance">₹0.00</div>
+                </div>
+                <div class="card">
+                    <h3>📈 Total Investments</h3>
+                    <div class="amount" id="total-investments">₹0.00</div>
+                </div>
+                <div class="card expense">
+                    <h3>📊 Monthly Expenses</h3>
+                    <div class="amount" id="monthly-expenses">₹0.00</div>
+                </div>
+                <div class="card warning">
+                    <h3>🏛️ Tax Liability</h3>
+                    <div class="amount" id="tax-liability">₹0.00</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Financial Overview</h3>
+                <canvas id="financialChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div id="transactions" class="tab-content">
+            <div class="form-section">
+                <h3>Add New Transaction</h3>
+                <form id="transaction-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <input type="text" id="description" placeholder="e.g., Salary, Groceries" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount">Amount (₹)</label>
+                            <input type="number" id="amount" placeholder="e.g., 50000" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category" required>
+                                <option value="">Select Category</option>
+                                <option value="salary">Salary</option>
+                                <option value="freelance">Freelance</option>
+                                <option value="business">Business Income</option>
+                                <option value="food">Food & Dining</option>
+                                <option value="transport">Transportation</option>
+                                <option value="utilities">Utilities</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="entertainment">Entertainment</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="education">Education</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction-type">Type</label>
+                            <select id="transaction-type" required>
+                                <option value="income">💰 Income</option>
+                                <option value="expense">💸 Expense</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Add Transaction</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <h3 style="padding: 20px; margin: 0; background: #f8f9fa;">Recent Transactions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transaction-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Investments Tab -->
+        <div id="investments" class="tab-content">
+            <div class="form-section">
+                <h3>Add Investment</h3>
+                <form id="investment-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="investment-name">Investment Name</label>
+                            <input type="text" id="investment-name" placeholder="e.g., HDFC Mutual Fund" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="investment-type">Investment Type</label>
+                            <select id="investment-type" required>
+                                <option value="">Select Type</option>
+                                <option value="mutual-fund">Mutual Fund</option>
+                                <option value="stocks">Stocks</option>
+                                <option value="fd">Fixed Deposit</option>
+                                <option value="ppf">PPF</option>
+                                <option value="nsc">NSC</option>
+                                <option value="elss">ELSS</option>
+                                <option value="bonds">Bonds</option>
+                                <option value="crypto">Cryptocurrency</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="investment-amount">Amount Invested (₹)</label>
+                            <input type="number" id="investment-amount" placeholder="e.g., 50000" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="current-value">Current Value (₹)</label>
+                            <input type="number" id="current-value" placeholder="e.g., 55000" step="0.01">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-secondary">Add Investment</button>
+                </form>
+            </div>
+
+            <div class="table-container">
+                <h3 style="padding: 20px; margin: 0; background: #f8f9fa;">Investment Portfolio</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Investment Name</th>
+                            <th>Type</th>
+                            <th>Amount Invested</th>
+                            <th>Current Value</th>
+                            <th>Gain/Loss</th>
+                            <th>Return %</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investment-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Taxes Tab -->
+        <div id="taxes" class="tab-content">
+            <div class="tax-section">
+                <h3>🏛️ ITR & Tax Management</h3>
+                <p>Financial Year 2024-25 | Assessment Year 2025-26</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="tax-progress" style="width: 0%"></div>
+                </div>
+                <p style="margin-top: 10px;">Tax Filing Progress: <span id="tax-progress-text">0%</span></p>
+            </div>
+
+            <div class="form-section">
+                <h3>Income Tax Calculator</h3>
+                <form id="tax-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="annual-income">Annual Income (₹)</label>
+                            <input type="number" id="annual-income" placeholder="e.g., 1200000" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="tax-regime">Tax Regime</label>
+                            <select id="tax-regime">
+                                <option value="old">Old Tax Regime</option>
+                                <option value="new">New Tax Regime</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="deductions">Total Deductions (₹)</label>
+                            <input type="number" id="deductions" placeholder="e.g., 150000" step="1">
+                        </div>
+                    </div>
+                    <button type="button" class="btn" onclick="calculateTax()">Calculate Tax</button>
+                </form>
+            </div>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h3>💰 Gross Income</h3>
+                    <div class="amount" id="gross-income">₹0</div>
+                </div>
+                <div class="card">
+                    <h3>🎯 Taxable Income</h3>
+                    <div class="amount" id="taxable-income">₹0</div>
+                </div>
+                <div class="card warning">
+                    <h3>🏛️ Tax Payable</h3>
+                    <div class="amount" id="tax-payable">₹0</div>
+                </div>
+                <div class="card">
+                    <h3>💳 In-hand Salary</h3>
+                    <div class="amount" id="in-hand-salary">₹0</div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>Tax-Saving Investments Tracker</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="section-80c">Section 80C (₹)</label>
+                        <input type="number" id="section-80c" placeholder="Max: 150000" max="150000">
+                    </div>
+                    <div class="form-group">
+                        <label for="section-80d">Section 80D (₹)</label>
+                        <input type="number" id="section-80d" placeholder="Max: 25000" max="25000">
+                    </div>
+                    <div class="form-group">
+                        <label for="hra">HRA Claimed (₹)</label>
+                        <input type="number" id="hra" placeholder="e.g., 200000">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Budget Tab -->
+        <div id="budget" class="tab-content">
+            <div class="form-section">
+                <h3>Set Monthly Budget</h3>
+                <form id="budget-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="budget-category">Category</label>
+                            <select id="budget-category" required>
+                                <option value="">Select Category</option>
+                                <option value="food">Food & Dining</option>
+                                <option value="transport">Transportation</option>
+                                <option value="utilities">Utilities</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="entertainment">Entertainment</option>
+                                <option value="shopping">Shopping</option>
+                                <option value="education">Education</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budget-amount">Budget Amount (₹)</label>
+                            <input type="number" id="budget-amount" placeholder="e.g., 15000" step="0.01" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">Set Budget</button>
+                </form>
+            </div>
+
+            <div class="form-section">
+                <h3>📊 Monthly Budget Overview</h3>
+                <div id="budget-overview">
+                    <!-- Budget items will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="dashboard">
+                <div class="card">
+                    <h3>📅 Total Monthly Budget</h3>
+                    <div class="amount" id="total-budget">₹0</div>
+                </div>
+                <div class="card expense">
+                    <h3>💸 Total Spent</h3>
+                    <div class="amount" id="total-spent">₹0</div>
+                </div>
+                <div class="card">
+                    <h3>💰 Remaining Budget</h3>
+                    <div class="amount" id="remaining-budget">₹0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
